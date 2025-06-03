@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@types/node": "^22.15.29",
+    "openai": "^5.1.0"
+  }
+}
