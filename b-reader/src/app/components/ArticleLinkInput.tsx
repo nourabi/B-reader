@@ -26,7 +26,8 @@ export default function ArticleLinkInput({ onSvgGenerated }: Props) {
       } else {
         alert(data.error || 'Failed to generate Braille SVG');
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Error generating Braille SVG:', error);
       alert('An error occurred while generating Braille SVG');
     }
     setLoading(false);
