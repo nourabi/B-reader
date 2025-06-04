@@ -18,46 +18,46 @@ export async function POST(req: NextRequest) {
   }
 
    try {
-//     // --- First prompt: extract website content ---
-//     const response1 = await openai.chat.completions.create({
-//       model: "meta/llama3-8b-instruct",
-//       messages: [{
-//         role: "user",
-//         content: `VISIT WEBSITE: ${url}
-// TASKS:
-// 1. Extract main content, ignoring ads and non-essential elements
-// 2. Describe any relevant images in text format
-// 3. Structure the information clearly
+    // --- First prompt: extract website content ---
+    const response1 = await openai.chat.completions.create({
+      model: "meta/llama3-8b-instruct",
+      messages: [{
+        role: "user",
+        content: `VISIT WEBSITE: ${url}
+TASKS:
+1. Extract main content, ignoring ads and non-essential elements
+2. Describe any relevant images in text format
+3. Structure the information clearly
 
-// RETURN FORMAT:
-// Cleaned text content with image descriptions`,
-//       }],
-//       temperature: 0.1,
-//       max_tokens: 2000,
-//     });
+RETURN FORMAT:
+Cleaned text content with image descriptions`,
+      }],
+      temperature: 0.1,
+      max_tokens: 2000,
+    });
 
-//     const extractedText = response1.choices[0].message.content || '';
+    const extractedText = response1.choices[0].message.content || '';
 
-//     // --- Second prompt: convert to Braille SVG ---
-//     const response2 = await openai.chat.completions.create({
-//       model: "meta/llama3-8b-instruct",
-//       messages: [{
-//         role: "user",
-//         content: `CONVERT THE FOLLOWING TEXT INTO BRAILLE, RETURN THE RESULT AS A SVG FILE:\n\n${extractedText}\n\n
-// REQUIREMENTS:
-// 1. Convert ALL the text in braille format
-// 2. Create valid SVG markup with <svg> tags
-// 3. Maintain readable line structure
-// 4. Set appropriate viewBox dimensions`,
-//       }],
-//       temperature: 0.1,
-//       max_tokens: 2000,
-//     });
+    // --- Second prompt: convert to Braille SVG ---
+    const response2 = await openai.chat.completions.create({
+      model: "meta/llama3-8b-instruct",
+      messages: [{
+        role: "user",
+        content: `CONVERT THE FOLLOWING TEXT INTO BRAILLE, RETURN THE RESULT AS A SVG FILE:\n\n${extractedText}\n\n
+REQUIREMENTS:
+1. Convert ALL the text in braille format
+2. Create valid SVG markup with <svg> tags
+3. Maintain readable line structure
+4. Set appropriate viewBox dimensions`,
+      }],
+      temperature: 0.1,
+      max_tokens: 2000,
+    });
 
-//     const svg = response2.choices[0].message.content || '';
+    const svg = response2.choices[0].message.content || '';
 
-      // CALLING THE MOCK FUNCTION INSTEAD of API 
-      const svg = mockGenerateBrailleSvg(url);
+      // MOCKING PURPOSES SO WE WONT SEND TOO MANY REQUESTS TO NVIDIA API
+      //const svg = mockGenerateBrailleSvg(url);
 
     return NextResponse.json({ svg });
   } catch (error: any) {
