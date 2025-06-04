@@ -18,46 +18,46 @@ export async function POST(req: NextRequest) {
   }
 
    try {
-    // --- First prompt: extract website content ---
-    const response1 = await openai.chat.completions.create({
-      model: "meta/llama3-8b-instruct",
-      messages: [{
-        role: "user",
-        content: `VISIT WEBSITE: ${url}
-TASKS:
-1. Extract main content, ignoring ads and non-essential elements
-2. Describe any relevant images in text format
-3. Structure the information clearly
+//     // --- First prompt: extract website content ---
+//     const response1 = await openai.chat.completions.create({
+//       model: "meta/llama3-8b-instruct",
+//       messages: [{
+//         role: "user",
+//         content: `VISIT WEBSITE: ${url}
+// TASKS:
+// 1. Extract main content, ignoring ads and non-essential elements
+// 2. Describe any relevant images in text format
+// 3. Structure the information clearly
 
-RETURN FORMAT:
-Cleaned text content with image descriptions`,
-      }],
-      temperature: 0.1,
-      max_tokens: 2000,
-    });
+// RETURN FORMAT:
+// Cleaned text content with image descriptions`,
+//       }],
+//       temperature: 0.1,
+//       max_tokens: 2000,
+//     });
 
-    const extractedText = response1.choices[0].message.content || '';
+//     const extractedText = response1.choices[0].message.content || '';
 
-    // --- Second prompt: convert to Braille SVG ---
-    const response2 = await openai.chat.completions.create({
-      model: "meta/llama3-8b-instruct",
-      messages: [{
-        role: "user",
-        content: `CONVERT THE FOLLOWING TEXT INTO BRAILLE, RETURN THE RESULT AS A SVG FILE:\n\n${extractedText}\n\n
-REQUIREMENTS:
-1. Convert ALL the text in braille format
-2. Create valid SVG markup with <svg> tags
-3. Maintain readable line structure
-4. Set appropriate viewBox dimensions`,
-      }],
-      temperature: 0.1,
-      max_tokens: 2000,
-    });
+//     // --- Second prompt: convert to Braille SVG ---
+//     const response2 = await openai.chat.completions.create({
+//       model: "meta/llama3-8b-instruct",
+//       messages: [{
+//         role: "user",
+//         content: `CONVERT THE FOLLOWING TEXT INTO BRAILLE, RETURN THE RESULT AS A SVG FILE:\n\n${extractedText}\n\n
+// REQUIREMENTS:
+// 1. Convert ALL the text in braille format
+// 2. Create valid SVG markup with <svg> tags
+// 3. Maintain readable line structure
+// 4. Set appropriate viewBox dimensions`,
+//       }],
+//       temperature: 0.1,
+//       max_tokens: 2000,
+//     });
 
-    const svg = response2.choices[0].message.content || '';
+//     const svg = response2.choices[0].message.content || '';
 
       // MOCKING PURPOSES SO WE WONT SEND TOO MANY REQUESTS TO NVIDIA API
-      //const svg = mockGenerateBrailleSvg(url);
+      const svg = mockGenerateBrailleSvg(url);
 
     return NextResponse.json({ svg });
   } catch (error: any) {
@@ -68,10 +68,20 @@ REQUIREMENTS:
 function mockGenerateBrailleSvg(url: string): string {
   console.log(`Mocking Braille SVG generation for URL: ${url}`);
   return `
-    <svg width="100%" height="100%" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+        <svg width="100%" height="100%" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
       <text x="50" y="50" font-size="24" font-family="braille">
-        <tspan x="0" y="0">⠃⠽⠊⠎⠑⠊⠎</tspan>
-        <tspan x="0" y="30">⠃⠽⠊⠎⠑⠊⠎</tspan>
+        <tspan class="braille-dot" x="0" y="0">⠃</tspan>
+        <tspan class="braille-dot" x="20" y="0">⠽</tspan>
+        <tspan class="braille-dot" x="40" y="0">⠊</tspan>
+        <tspan class="braille-dot" x="60" y="0">⠎</tspan>
+        <tspan class="braille-dot" x="80" y="0">⠑</tspan>
+        <tspan class="braille-dot" x="100" y="0">⠊</tspan>
+        <tspan class="braille-dot" x="0" y="30">⠃</tspan>
+        <tspan class="braille-dot" x="20" y="30">⠽</tspan>
+        <tspan class="braille-dot" x="40" y="30">⠊</tspan>
+        <tspan class="braille-dot" x="60" y="30">⠎</tspan>
+        <tspan class="braille-dot" x="80" y="30">⠑</tspan>
+        <tspan class="braille-dot" x="100" y="30">⠊</tspan>
       </text>
     </svg>
   `;
