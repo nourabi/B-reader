@@ -1,7 +1,6 @@
 {
   "dependencies": {
-    "@types/node": "^22.15.29",
-    "openai": "^5.1.0"
+    "@types/node": "^22.15.29"
   },
   "scripts": {
   "build": "next build",
